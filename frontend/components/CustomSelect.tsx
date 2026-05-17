@@ -1,0 +1,66 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+
+export interface CustomSelectProps {
+  value: string;
+  onChange: (val: string) => void;
+  options: string[];
+  className?: string;
+}
+
+export default function CustomSelect({ value, onChange, options, className = "" }: CustomSelectProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className={`relative w-full text-sm font-body ${className}`} ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between bg-[rgba(0,0,0,0.2)] border border-border rounded-xl px-[18px] py-[14px] text-text hover:border-[rgba(240,196,61,0.3)] focus:outline-none focus:ring-[4px] focus:ring-[rgba(240,196,61,0.1)] focus:border-[rgba(240,196,61,0.5)] focus:bg-[rgba(240,196,61,0.02)] transition-all ease-in-out duration-200"
+      >
+        <span>{value}</span>
+        <svg 
+          className={`w-4 h-4 text-sub transition-transform duration-200 ${open ? "rotate-180" : ""}`} 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <ul className="absolute z-[100] top-full left-0 right-0 mt-2 bg-[#0B0B0F] border border-[rgba(212,175,55,0.45)] rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.8)] py-1 max-h-60 overflow-y-auto backdrop-blur-xl">
+          {options.map((opt) => (
+            <li
+              key={opt}
+              onClick={() => {
+                onChange(opt);
+                setOpen(false);
+              }}
+              className={`px-[18px] py-3 cursor-pointer transition-colors text-[#F8FAFC] hover:bg-[rgba(212,175,55,0.12)] ${
+                value === opt 
+                  ? "bg-[rgba(212,175,55,0.12)] text-[#F0C43D] font-medium" 
+                  : "text-[#A1A1AA]"
+              }`}
+            >
+              {opt}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
