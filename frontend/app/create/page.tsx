@@ -22,7 +22,7 @@ export default function CreatePage() {
     if (!address) { connect(); return; }
     setLoading(true); setError(null);
     try {
-      let deadline = 0n;
+      let deadline = BigInt(0);
       if (form.deadlineDate) {
         const dt = new Date(`${form.deadlineDate}T${form.deadlineTime}:00`);
         deadline = BigInt(Math.floor(dt.getTime() / 1000));

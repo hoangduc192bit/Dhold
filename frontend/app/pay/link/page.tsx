@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { isAddress } from "viem";
 import { useWallet } from "../../../hooks/useWallet";
 import { arcscanTx, shortAddr } from "../../../lib/contract";
 import { appKitSend, fallbackErc20Send, findTxHash, stringifyResult } from "../../../lib/circlekit";
 
-export default function PayLinkPage() {
+function PayLinkContent() {
   const params = useSearchParams();
   const { address, connected, connect } = useWallet();
 
@@ -131,5 +131,13 @@ export default function PayLinkPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PayLinkPage() {
+  return (
+    <Suspense fallback={<div className="max-w-lg mx-auto px-4 sm:px-6 py-16 text-center"><div className="card p-10 space-y-4"><p className="text-sub font-body">Loading...</p></div></div>}>
+      <PayLinkContent />
+    </Suspense>
   );
 }

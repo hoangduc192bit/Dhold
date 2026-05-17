@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 export interface CustomSelectProps {
   value: string;
   onChange: (val: string) => void;
-  options: string[];
+  options: readonly string[];
   className?: string;
 }
 

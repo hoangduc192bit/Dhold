@@ -26,7 +26,7 @@ export default function HomePage() {
 
   const open = bounties.filter(b => b.status === BountyStatus.Open);
   const closed = bounties.filter(b => b.status === BountyStatus.Closed);
-  const volume = bounties.reduce((s, b) => s + b.amount, 0n);
+  const volume = bounties.reduce((s, b) => s + b.amount, BigInt(0));
   const featured = open.slice(0, 3);
 
   return (

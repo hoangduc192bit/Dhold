@@ -39,7 +39,7 @@ export default function LeaderboardPage() {
         const getStats = (addr: string) => {
           const laddr = addr.toLowerCase();
           if (!statsMap.has(laddr)) {
-            statsMap.set(laddr, { jobsCompleted: 0n, jobsPosted: 0n, totalEarned: 0n, totalPaid: 0n });
+            statsMap.set(laddr, { jobsCompleted: BigInt(0), jobsPosted: BigInt(0), totalEarned: BigInt(0), totalPaid: BigInt(0) });
           }
           return statsMap.get(laddr)!;
         };
@@ -80,8 +80,8 @@ export default function LeaderboardPage() {
   }, []);
 
   const filtered = useMemo(() => rows.filter(r => {
-    if (tab === "freelancers") return r.stats.jobsCompleted > 0n;
-    if (tab === "clients") return r.stats.jobsPosted > 0n;
+    if (tab === "freelancers") return r.stats.jobsCompleted > BigInt(0);
+    if (tab === "clients") return r.stats.jobsPosted > BigInt(0);
     return true;
   }), [rows, tab]);
 
@@ -121,8 +121,8 @@ function LeaderRow({ row, rank }: { row: Row; rank: number }) {
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-2">
           <p className="font-mono text-gold text-sm">{shortAddr(row.address)}</p>
-          {row.stats.jobsCompleted > 0n && <span className="badge bg-green/10 border border-green/20 text-green">Freelancer</span>}
-          {row.stats.jobsPosted > 0n && <span className="badge bg-blue/10 border border-blue/20 text-blue">Client</span>}
+          {row.stats.jobsCompleted > BigInt(0) && <span className="badge bg-green/10 border border-green/20 text-green">Freelancer</span>}
+          {row.stats.jobsPosted > BigInt(0) && <span className="badge bg-blue/10 border border-blue/20 text-blue">Client</span>}
         </div>
       </div>
       <div className="grid sm:grid-cols-4 gap-3">

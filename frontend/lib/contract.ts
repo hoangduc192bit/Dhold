@@ -63,22 +63,22 @@ export const wal = () => typeof window !== "undefined" && window.ethereum
   ? createWalletClient({ chain: arcTestnet, transport: custom(window.ethereum) }) : null;
 
 export const getAllBounties = async (): Promise<Bounty[]> =>
-  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getAllBounties" })) as Bounty[];
+  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getAllBounties" })) as unknown as Bounty[];
 
 export const getBounty = async (id: bigint): Promise<Bounty> =>
-  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getBounty", args: [id] })) as Bounty;
+  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getBounty", args: [id] })) as unknown as Bounty;
 
 export const getSubmissions = async (id: bigint): Promise<Submission[]> =>
-  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getSubmissions", args: [id] })) as Submission[];
+  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getSubmissions", args: [id] })) as unknown as Submission[];
 
 export const getBountiesByClient = async (addr: `0x${string}`): Promise<Bounty[]> =>
-  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getBountiesByClient", args: [addr] })) as Bounty[];
+  (await pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "getBountiesByClient", args: [addr] })) as unknown as Bounty[];
 
 export const checkHasSubmitted = async (id: bigint, addr: `0x${string}`): Promise<boolean> =>
-  pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "hasSubmitted", args: [id, addr] }) as Promise<boolean>;
+  pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "hasSubmitted", args: [id, addr] }) as unknown as Promise<boolean>;
 
 export const getWinner = async (id: bigint): Promise<`0x${string}`> =>
-  pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "winnerOf", args: [id] }) as Promise<`0x${string}`>;
+  pub().readContract({ address: CONTRACT_ADDRESS, abi: ABI, functionName: "winnerOf", args: [id] }) as unknown as Promise<`0x${string}`>;
 
 
 
@@ -103,9 +103,9 @@ export async function txMarkDisputed(account: `0x${string}`, bountyId: bigint) {
 
 export const fmtUSDC = (n: bigint) => parseFloat(formatEther(n)).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 export const shortAddr = (a: string) => `${a.slice(0, 6)}…${a.slice(-4)}`;
-export const fmtDate = (ts: bigint) => !ts || ts === 0n ? "—" : new Date(Number(ts) * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+export const fmtDate = (ts: bigint) => !ts || ts === BigInt(0) ? "—" : new Date(Number(ts) * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 export const fmtDeadline = (ts: bigint): string => {
-  if (!ts || ts === 0n) return "No deadline";
+  if (!ts || ts === BigInt(0)) return "No deadline";
   const diff = Number(ts) * 1000 - Date.now();
   if (diff < 0) return "Expired";
   const d = Math.floor(diff / 86400000);

@@ -67,7 +67,7 @@ export default function BridgePage() {
           {!connected ? <button onClick={connect} className="btn-gold w-full py-4 text-sm">Connect Wallet</button> : <button onClick={bridge} disabled={loading || !amount || fromChain === toChain} className="btn-gold w-full py-4 text-sm">{loading ? "Bridging..." : "Bridge USDC"}</button>}
 
           {error && <div className="rounded-2xl border border-red/30 bg-red/5 p-4 text-red text-sm">{error}</div>}
-          {result && (
+          {!!result && (
             <div className="rounded-2xl border border-green/30 bg-green/5 p-5 text-center space-y-2">
               <div className="w-10 h-10 mx-auto rounded-full bg-green/20 flex items-center justify-center text-green text-lg">✓</div>
               <p className="text-green font-display font-700 text-lg">Done!</p>

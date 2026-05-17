@@ -24,8 +24,8 @@ export default function Dashboard() {
     }).catch(() => {}).finally(() => setLoading(false));
   }, [address, noContract]);
 
-  const earned = created.filter(b => b.status === BountyStatus.Closed).reduce((s, b) => s + b.amount, 0n);
-  const locked = created.filter(b => b.status === BountyStatus.Open).reduce((s, b) => s + b.amount, 0n);
+  const earned = created.filter(b => b.status === BountyStatus.Closed).reduce((s, b) => s + b.amount, BigInt(0));
+  const locked = created.filter(b => b.status === BountyStatus.Open).reduce((s, b) => s + b.amount, BigInt(0));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-8">

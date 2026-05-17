@@ -40,8 +40,8 @@ export default function BountyDetail() {
 
   const isClient = address && bounty && address.toLowerCase() === bounty.client.toLowerCase();
   const nowTs = BigInt(Math.floor(Date.now() / 1000));
-  const isExpired = bounty && bounty.deadline > 0n && nowTs > bounty.deadline;
-  const isFull = bounty && bounty.maxSubmissions > 0n && BigInt(subs.length) >= bounty.maxSubmissions;
+  const isExpired = bounty && bounty.deadline > BigInt(0) && nowTs > bounty.deadline;
+  const isFull = bounty && bounty.maxSubmissions > BigInt(0) && BigInt(subs.length) >= bounty.maxSubmissions;
 
   if (loading) return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-4">
@@ -86,7 +86,7 @@ export default function BountyDetail() {
 
         {/* Info row */}
         <div className="flex flex-wrap gap-3">
-          {bounty.deadline > 0n && (
+          {bounty.deadline > BigInt(0) && (
             <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border ${isExpired ? "border-red/30 bg-red/5" : "border-gold/20 bg-gold/5"}`}>
               <svg className={`w-4 h-4 ${isExpired ? "text-red" : "text-gold"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <div>
@@ -101,7 +101,7 @@ export default function BountyDetail() {
             <div>
               <p className="text-[10px] text-sub/60 font-body">Submissions</p>
               <p className={`text-sm font-body font-600 ${isFull ? "text-red" : "text-text"}`}>
-                {subs.length}{bounty.maxSubmissions > 0n ? ` / ${bounty.maxSubmissions}` : " / ∞"}
+                {subs.length}{bounty.maxSubmissions > BigInt(0) ? ` / ${bounty.maxSubmissions}` : " / ∞"}
               </p>
             </div>
           </div>

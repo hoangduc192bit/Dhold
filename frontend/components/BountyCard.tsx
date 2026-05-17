@@ -4,7 +4,7 @@ import StatusBadge from "./StatusBadge";
 import TiltCard from "./TiltCard";
 
 export default function BountyCard({ bounty }: { bounty: Bounty }) {
-  const isExpired = bounty.deadline > 0n && BigInt(Math.floor(Date.now() / 1000)) > bounty.deadline;
+  const isExpired = bounty.deadline > BigInt(0) && BigInt(Math.floor(Date.now() / 1000)) > bounty.deadline;
   const deadlineText = fmtDeadline(bounty.deadline);
 
   return (
@@ -37,13 +37,13 @@ export default function BountyCard({ bounty }: { bounty: Bounty }) {
 
         {/* Deadline + slots */}
         <div className="flex items-center gap-2 flex-wrap mb-4">
-          {bounty.deadline > 0n && (
+          {bounty.deadline > BigInt(0) && (
             <span className={`inline-flex items-center gap-1 text-[11px] font-body font-500 px-2.5 py-1 rounded-full ${isExpired ? "bg-red/10 text-red border border-red/20" : "bg-gold/8 text-gold border border-gold/20"}`}>
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               {deadlineText}
             </span>
           )}
-          {bounty.maxSubmissions > 0n && (
+          {bounty.maxSubmissions > BigInt(0) && (
             <span className="inline-flex items-center gap-1 text-[11px] font-body font-500 px-2.5 py-1 rounded-full bg-surface border border-border text-sub">
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0" /></svg>
               Max {String(bounty.maxSubmissions)}
