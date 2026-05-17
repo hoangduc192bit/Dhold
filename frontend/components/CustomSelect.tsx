@@ -42,7 +42,7 @@ export default function CustomSelect({ value, onChange, options, className = "" 
       </button>
 
       {open && (
-        <ul className="absolute z-[100] top-full left-0 right-0 mt-2 bg-[#0B0B0F] border border-[rgba(212,175,55,0.45)] rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.8)] py-1 max-h-60 overflow-y-auto backdrop-blur-xl">
+        <ul className="absolute z-[100] top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl overflow-hidden shadow-2xl py-1 max-h-60 overflow-y-auto backdrop-blur-xl">
           {options.map((opt) => (
             <li
               key={opt}
@@ -50,10 +50,10 @@ export default function CustomSelect({ value, onChange, options, className = "" 
                 onChange(opt);
                 setOpen(false);
               }}
-              className={`px-[18px] py-3 cursor-pointer transition-colors text-[#F8FAFC] hover:bg-[rgba(212,175,55,0.12)] ${
+              className={`px-[18px] py-3 cursor-pointer transition-colors ${
                 value === opt 
-                  ? "bg-[rgba(212,175,55,0.12)] text-[#F0C43D] font-medium" 
-                  : "text-[#A1A1AA]"
+                  ? "bg-gold/10 text-gold font-medium" 
+                  : "text-sub hover:text-text hover:bg-gold/5"
               }`}
             >
               {opt}

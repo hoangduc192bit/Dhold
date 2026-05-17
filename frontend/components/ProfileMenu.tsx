@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useWallet } from "../hooks/useWallet";
 import { arcscanAddr, shortAddr } from "../lib/contract";
 import { useTheme } from "./ThemeProvider";
+import CustomSelect from "./CustomSelect";
 
 export default function ProfileMenu() {
   const { address, connected, correctNetwork, balance, connecting, connect, switchNetwork } = useWallet();
@@ -66,12 +67,11 @@ export default function ProfileMenu() {
 
             <div>
               <label className="block text-xs text-sub/70 font-body mb-1.5">Main role</label>
-              <select className="select" value={role} onChange={e => save("arc_profile_role", e.target.value)}>
-                <option>Freelancer</option>
-                <option>Client</option>
-                <option>Builder</option>
-                <option>Agent Operator</option>
-              </select>
+              <CustomSelect 
+                value={role} 
+                onChange={val => save("arc_profile_role", val)} 
+                options={["Freelancer", "Client", "Builder", "Agent Operator"]} 
+              />
             </div>
 
             <div className="rounded-2xl border border-border bg-surface p-4">

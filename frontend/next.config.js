@@ -4,8 +4,12 @@ module.exports = {
   async rewrites() {
     return [
       {
-        source: '/api/circle/:path*',
+        source: '/api/circle-mainnet/:path*',
         destination: 'https://api.circle.com/:path*',
+      },
+      {
+        source: '/api/circle-sandbox/:path*',
+        destination: 'https://api-sandbox.circle.com/:path*',
       },
     ];
   },

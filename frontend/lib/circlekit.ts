@@ -25,14 +25,16 @@ type AnyRecord = Record<string, any>;
 
 let proxyInstalled = false;
 function installCircleProxyIfConfigured() {
-  const proxy = process.env.NEXT_PUBLIC_CIRCLE_PROXY_URL;
-  if (proxyInstalled || typeof window === "undefined" || !proxy) return;
+  if (proxyInstalled || typeof window === "undefined") return;
   const originalFetch = window.fetch.bind(window);
   window.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
-    if (url.startsWith("https://api.circle.com/") || url.startsWith("https://api-sandbox.circle.com/")) {
-      const domain = url.startsWith("https://api-sandbox.circle.com/") ? "https://api-sandbox.circle.com" : "https://api.circle.com";
-      const nextUrl = proxy.replace(/\/$/, "") + url.replace(domain, "");
+    if (url.startsWith("https://api.circle.com/")) {
+      const nextUrl = "/api/circle-mainnet" + url.replace("https://api.circle.com", "");
+      return originalFetch(nextUrl, init);
+    }
+    if (url.startsWith("https://api-sandbox.circle.com/")) {
+      const nextUrl = "/api/circle-sandbox" + url.replace("https://api-sandbox.circle.com", "");
       return originalFetch(nextUrl, init);
     }
     return originalFetch(input as RequestInfo, init);
@@ -141,6 +143,20 @@ export async function appKitBridge(params: { fromChain: string; toChain: string;
     config: { useForwarder: params.useForwarder ?? true },
   } as any;
   return (kit as AnyRecord).bridge(bridgeParams);
+}
+
+export async function appKitEstimateBridge(params: { fromChain: string; toChain: string; amount: string; useForwarder?: boolean }) {
+  if (params.fromChain === params.toChain) throw new Error("Choose two different chains");
+  const adapter = await getBrowserAdapter();
+  const kit = await getAppKit();
+  const bridgeParams = {
+    from: { adapter, chain: params.fromChain },
+    to: { adapter, chain: params.toChain },
+    amount: params.amount,
+    token: "USDC",
+    config: { useForwarder: params.useForwarder ?? true },
+  } as any;
+  return (kit as AnyRecord).estimateBridge(bridgeParams);
 }
 
 export async function fallbackErc20Send(params: { account: `0x${string}`; to: `0x${string}`; amount: string; token?: TokenSymbol }) {

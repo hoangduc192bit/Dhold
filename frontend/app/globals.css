@@ -212,3 +212,8 @@ body::after {
   pointer-events: none;
   z-index: -1;
 }
+
+.select option {
+  background-color: var(--surface);
+  color: var(--text);
+}
