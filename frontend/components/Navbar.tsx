@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import ProfileMenu from "./ProfileMenu";
 
@@ -20,11 +21,8 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 glass border-b border-border/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="relative w-8 h-8">
-            <div className="absolute inset-0 rounded-lg bg-gold-gradient opacity-20 blur-sm" />
-            <div className="relative w-8 h-8 rounded-lg bg-gold-gradient flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L14.5 4.75V11.25L8 15L1.5 11.25V4.75L8 1Z" stroke="#08090E" strokeWidth="1.5" strokeLinejoin="round" fill="none"/><path d="M8 5L11 6.75V10.25L8 12L5 10.25V6.75L8 5Z" fill="#08090E"/></svg>
-            </div>
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <Image src="/logo.png" alt="ArcBounty Logo" width={32} height={32} className="object-contain" priority />
           </div>
           <div>
             <span className="font-display font-800 text-text tracking-tight text-sm">Arc</span>

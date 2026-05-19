@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getAllBounties, Bounty, BountyStatus, fmtUSDC, CONTRACT_ADDRESS } from "../lib/contract";
 import BountyCard from "../components/BountyCard";
@@ -44,11 +45,12 @@ export default function HomePage() {
             Live on Arc Testnet · Native USDC
           </div>
 
-          {/* Heading */}
-          <h1 className="font-display font-800 text-5xl sm:text-6xl lg:text-7xl leading-none tracking-tight mb-6">
-            <span className="text-text">The Bounty Platform</span>
-            <br />
-            <span className="text-gold-gradient">Built for Arc Builders</span>
+          {/* Logo & Heading */}
+          <div className="flex justify-center mb-6">
+            <Image src="/logo.png" alt="ArcBounty Logo" width={140} height={140} className="object-contain drop-shadow-2xl" priority />
+          </div>
+          <h1 className="font-display font-900 text-6xl sm:text-7xl lg:text-8xl leading-none tracking-tight mb-8">
+            <span className="text-gold-gradient drop-shadow-md">The Bounty</span>
           </h1>
 
           <p className="text-sub font-body text-lg sm:text-xl max-w-lg mx-auto mb-10 leading-relaxed">
