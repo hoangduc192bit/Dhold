@@ -19,10 +19,17 @@ function PayLinkContent() {
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [valid, setValid] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
 
   useEffect(() => {
     setValid(isAddress(to) && !!amount && parseFloat(amount) > 0);
   }, [to, amount]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentUrl(window.location.href);
+    }
+  }, []);
 
   async function pay() {
     if (!address || !valid) return;
@@ -92,6 +99,26 @@ function PayLinkContent() {
             <p className="text-sm text-text font-body">Arc Testnet</p>
           </div>
         </div>
+
+        {/* Collapsible QR Code for Mobile Scanning */}
+        {currentUrl && (
+          <details className="group border border-border/80 rounded-2xl overflow-hidden bg-surface/50 transition-all">
+            <summary className="px-4 py-3 text-xs text-sub/80 cursor-pointer hover:text-text hover:bg-muted transition-colors flex items-center justify-between font-mono select-none">
+              <span>📱 Scan QR Code to Pay on Mobile</span>
+              <span className="text-[9px] transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div className="p-4 flex flex-col items-center justify-center bg-black/10 border-t border-border/50 space-y-3">
+              <div className="relative p-3 bg-white rounded-2xl border border-gold/20 shadow-[0_0_15px_rgba(240,196,61,0.08)]">
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(currentUrl)}&color=0-0-0`}
+                  alt="Scan to Pay"
+                  className="w-[140px] h-[140px] rounded-lg"
+                />
+              </div>
+              <p className="text-[10px] text-sub/60 text-center font-body">Scan this QR Code with your phone to open this payment link on mobile.</p>
+            </div>
+          </details>
+        )}
 
         {/* Action */}
         {txHash ? (

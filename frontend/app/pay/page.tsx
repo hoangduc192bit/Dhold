@@ -35,6 +35,26 @@ export default function PayPage() {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
   }
 
+  async function downloadQR() {
+    if (!generated) return;
+    try {
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(generated)}&color=0-0-0`;
+      const response = await fetch(qrUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `arcbounty-paylink-qr.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to download QR code:", err);
+      window.open(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(generated)}&color=0-0-0`, "_blank");
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12 space-y-8">
       {/* Header */}
@@ -114,12 +134,38 @@ export default function PayPage() {
                 <div className="w-8 h-8 rounded-full bg-green/15 flex items-center justify-center">
                   <svg className="w-4 h-4 text-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                 </div>
-                <p className="font-display font-600 text-green text-sm">Payment link ready!</p>
+                <p className="font-display font-600 text-green text-sm">Payment Link & QR Code ready!</p>
               </div>
 
               <div className="rounded-xl bg-surface border border-border p-4">
                 <p className="text-[10px] text-sub/60 font-body mb-2">Your link</p>
                 <p className="font-mono text-xs text-text break-all leading-relaxed">{generated}</p>
+              </div>
+
+              {/* QR Code Segment */}
+              <div className="flex flex-col items-center justify-center p-6 bg-surface border border-border rounded-xl space-y-4">
+                <p className="text-xs text-sub/80 font-body font-500">Scan to pay instantly on Arc Testnet</p>
+                <div className="relative p-4 bg-white rounded-2xl border-2 border-gold/30 shadow-[0_0_20px_rgba(240,196,61,0.15)] transition-all hover:scale-105 duration-300">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(generated)}&color=0-0-0`}
+                    alt="Payment QR Code"
+                    className="w-[180px] h-[180px] rounded-lg"
+                  />
+                  {/* Styled Gold corners */}
+                  <div className="absolute top-1.5 left-1.5 w-3.5 h-3.5 border-t-2 border-l-2 border-gold rounded-tl-sm" />
+                  <div className="absolute top-1.5 right-1.5 w-3.5 h-3.5 border-t-2 border-r-2 border-gold rounded-tr-sm" />
+                  <div className="absolute bottom-1.5 left-1.5 w-3.5 h-3.5 border-b-2 border-l-2 border-gold rounded-bl-sm" />
+                  <div className="absolute bottom-1.5 right-1.5 w-3.5 h-3.5 border-b-2 border-r-2 border-gold rounded-br-sm" />
+                </div>
+                <button 
+                  onClick={downloadQR}
+                  className="text-xs text-gold hover:text-gold-dim underline flex items-center gap-1.5 font-body transition-colors hover:brightness-110 active:scale-95"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download QR Code
+                </button>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
